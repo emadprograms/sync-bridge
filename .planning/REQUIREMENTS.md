@@ -24,4 +24,13 @@
 - Single-PC network adapter toggling — Deemed too unreliable for network share drops.
 
 ## Traceability
-*(To be populated by Roadmap)*
+
+| Requirement | Phase |
+|---|---|
+| SEC-01 | Phase 1 |
+| SEC-02 | Phase 1 |
+| SYNC-02 | Phase 2 |
+| INT-01 | Phase 3 |
+| INT-02 | Phase 3 |
+| SYNC-01 | Phase 4 |
+| SYNC-03 | Phase 5 |
