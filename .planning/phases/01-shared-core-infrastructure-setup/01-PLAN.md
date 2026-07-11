@@ -12,11 +12,17 @@ Establish the native PowerShell foundation, logging utilities, and the basic Two
   - **Risk Level**: High
 </threat_model>
 
+## Testing Boundary
+
+> **DEV MACHINE ONLY:** All files in `Tests/` (Pester) run exclusively on the developer's local machine. They must never be deployed or executed on the university network. Production scripts (`Sync-Utils.ps1`, `Test-NetworkIsolation.ps1`) use **zero external module dependencies** — native PowerShell cmdlets only.
+
 ## Wave 0: Validation & Test Setup
 - **W0-01**: Initialize testing infrastructure for Core Utilities.
   - *Action*: Create `Tests/CoreUtils.Tests.ps1` with Pester test stubs for the logging and configuration utilities.
+  - *Note*: Dev machine only. Requires Pester module (`Install-Module Pester`).
 - **W0-02**: Initialize testing infrastructure for Network Isolation.
   - *Action*: Create `Tests/NetworkIsolation.Tests.ps1` with Pester test stubs for validating SMB credential parsing, share I/O checks, and pre-flight tests.
+  - *Note*: Dev machine only. Requires Pester module (`Install-Module Pester`).
 
 ## Wave 1: Core Configuration and Utilities (Task 01-01-01)
 - **Task 01-01-01**: Implement Core Configuration & Logger (`Sync-Utils.ps1`, `config.json`, `.env` parsing, `.gitignore` update)
