@@ -109,3 +109,73 @@ Phase 01 was reviewed by 2 independent AI systems. Both rated the overall risk a
 ### Divergent Views
 - Gemini flagged logging lock contention under burst load; Antigravity did not raise this specifically but both agreed on committing to `Out-File -Append`.
 - Antigravity additionally flagged missing repo folder layout and stale SMB mapping rollback, which Gemini did not raise.
+
+---
+
+## Convergence Review — Cycle 1
+*Reviewed: 2026-07-11*
+
+### Resolved Concerns
+- **Pester dev-machine-only scope (Gemini MEDIUM):** PLAN.md line 17 explicitly declares `DEV MACHINE ONLY` with a note that `Install-Module Pester` is required on the dev machine. Production scripts use zero external module dependencies. Fully resolved.
+- **Pester Fallback suggestion (Gemini):** Same testing boundary note resolves this. Fully resolved.
+
+### Unresolved HIGH Concerns
+- **SMB credential mounting mechanism unspecified:** PLAN.md (line 44) says "test SMB share reachability via standard PowerShell cmdlets" but does not commit to `net use` vs `New-SmbMapping`, does not document a `finally` block to clean up the mapping on failure or exit, and does not specify how parsed credentials are passed to the authentication call. **Fix needed:** Add one sentence to Task 01-01-02 specifying the chosen mechanism (recommend `net use` for compatibility) and a `finally` block that runs `net use /delete` on script exit or failure.
+- **Pre-flight I/O test cleanup not specified:** PLAN.md (line 45) mentions "a temporary hidden file I/O test" but has no `finally`/`Remove-Item` step. If the write succeeds but the delete fails, orphaned temp files accumulate and may interfere with later sync phases. **Fix needed:** Add an explicit note to Task 01-01-02 that the I/O test must include a `finally { Remove-Item -Force -ErrorAction SilentlyContinue }` cleanup block.
+
+### Unresolved Actionable Non-HIGH Concerns
+- **[MEDIUM] `config.json` missing-key error handling undefined:** PLAN.md does not mention a `Test-Config` helper or any validation logic for missing/null required keys. A misconfigured `config.json` would produce a cryptic null-dereference. **Fix needed:** Add a bullet to Task 01-01-01 specifying a `Test-Config` helper that validates required keys and throws a descriptive terminating error if any are absent.
+- **[MEDIUM] `.env` parser edge cases unspecified:** PLAN.md says "custom .env parsing function" (line 35) but gives no parser spec. Edge cases not covered: lines beginning with `#` (comments), values containing `=` (e.g., base64 passwords), leading/trailing whitespace on keys and values. **Fix needed:** Add a bullet to Task 01-01-01 specifying that the parser must: strip comment lines, split only on the *first* `=`, and trim whitespace from keys and values.
+- **[MEDIUM] No explicit repo folder layout / artifact file paths:** Script filenames are named but no folder structure is defined. Wave 2 needs to dot-source Wave 1 utilities via a known relative path. **Fix needed:** Add a note (or a new W0 task) defining the repo layout (e.g., `Scripts/`, `Tests/`) so that dot-source paths are unambiguous.
+- **[LOW] `Write-SyncLog` approach leaves two options open:** PLAN.md (line 34) still lists `Out-File -Append` OR `[System.IO.File]::AppendAllText` as alternatives. For SEC-01 compliance, only `Out-File -Append` avoids any risk of requiring `Add-Type`. **Fix needed:** Commit to `Out-File -Append` in Task 01-01-01 and remove the alternative.
+- **[LOW] No rollback plan for stale SMB mapping:** PLAN.md does not mention `Remove-SmbMapping` or `net use /delete` if the pre-flight authentication step leaves a stale mapping. **Fix needed:** Include a `finally` / cleanup note in Task 01-01-02 covering the SMB mapping teardown alongside the temp file cleanup.
+- **[LOW] Pester version not pinned:** PLAN.md (lines 22, 24) says `Install-Module Pester` with no version specified, risking Pester v4/v5 API differences. **Fix needed:** Pin the version in both Wave 0 task notes, e.g., `Install-Module Pester -RequiredVersion 5.6.1 -Force`.
+
+---
+
+## Convergence Review — Cycle 2
+*Reviewed: 2026-07-11*
+
+### Resolved Since Cycle 1
+
+1. **[HIGH] SMB credential mounting mechanism** — PLAN.md (line 83) now explicitly commits to `net use \\\\PC-B\\BridgeSync /user:$env:SMB_USERNAME $env:SMB_PASSWORD` with documented `finally` cleanup. Fully resolved.
+2. **[HIGH] Pre-flight I/O test cleanup** — PLAN.md (line 85) now mandates `finally { Remove-Item -Path $tempFilePath -Force -ErrorAction SilentlyContinue }` explicitly in Task 01-01-02. Fully resolved.
+3. **[MEDIUM] `config.json` missing-key error handling** — PLAN.md (line 67) defines a `Test-Config` helper that validates all required keys and throws a descriptive terminating error for any missing key. Fully resolved.
+4. **[MEDIUM] `.env` parser edge cases** — PLAN.md (lines 69–71) specifies exact rules: strip `#`-prefixed lines, split on first `=` only, trim whitespace from key and value. Fully resolved.
+5. **[MEDIUM] Repo folder layout undefined** — PLAN.md (lines 21–43) now provides a canonical folder tree (`Scripts/`, `Tests/`, root-level `config.json`, `.env`, `.env.example`, `.gitignore`) and the exact dot-source convention for Wave 2. Fully resolved.
+6. **[LOW] `Write-SyncLog` approach left open** — PLAN.md (line 66) commits to `Out-File -Append` exclusively and explicitly forbids `[System.IO.File]::AppendAllText`. Fully resolved.
+7. **[LOW] Stale SMB mapping rollback** — PLAN.md (line 84) includes `net use \\\\PC-B\\BridgeSync /delete /y 2>$null` inside the `finally` block. Fully resolved.
+8. **[LOW] Pester version not pinned** — PLAN.md (lines 50, 54) pins `Install-Module Pester -RequiredVersion 5.6.1 -Force -Scope CurrentUser` in both W0-01 and W0-02. Fully resolved.
+
+### Still Unresolved HIGH Concerns
+
+None.
+
+### Still Unresolved Actionable Non-HIGH Concerns
+
+None.
+
+### New Concerns (if any)
+
+- **[LOW] Hardcoded UNC path in `finally` teardown block:** PLAN.md (line 84) writes `net use \\\\PC-B\\BridgeSync /delete /y 2>$null` with a literal UNC path. If `SmbSharePath` in `config.json` is set to a different host or share name, the `finally` block will silently fail to remove the actual mapping. **Recommended fix:** Derive the teardown path from the parsed config value (e.g., `net use $config.SmbSharePath /delete /y 2>$null`) so the cleanup path is always consistent with the authenticated path.
+
+---
+
+## Convergence Review — Cycle 3 (Final)
+*Reviewed: 2026-07-11*
+
+### Resolved Since Cycle 2
+
+- **[LOW] Hardcoded UNC path in `finally` teardown block** — Fully resolved. PLAN.md (lines 83–84) now explicitly requires storing the parsed share path in a local variable (`$sharePath = $config.SmbSharePath`) immediately after calling `Test-Config`, then references `$sharePath` throughout — including in the `finally` cleanup: `net use $sharePath /delete /y 2>$null`. The plan additionally mandates in plain language that the `finally` block "must reference the variable holding the parsed UNC share path — NOT a hardcoded string." The Review Feedback table (PLAN.md line 109, row 9) further confirms "hardcoded strings explicitly prohibited." No literal `\\PC-B\BridgeSync` string remains anywhere in the task description.
+
+### Remaining Unresolved HIGH Concerns
+
+None.
+
+### Remaining Unresolved Actionable Non-HIGH Concerns
+
+None.
+
+### New Concerns (if any)
+
+None.
