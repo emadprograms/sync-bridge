@@ -3,7 +3,7 @@
 ## v1 Requirements
 
 ### Sync Core
-- [ ] **SYNC-01**: The system shall bidirectionally synchronize files between the local PC and the university network using SMB drop-folders (`\To_Uni`, `\To_Local`).
+- [ ] **SYNC-01**: The system shall bidirectionally synchronize files between the local PC and the university network using a single shared SMB folder (`\BridgeSync`).
 - [ ] **SYNC-02**: The system shall prevent infinite echo loops (ping-ponging) by maintaining a state cache (`uni-sync-manifest.json`).
 - [ ] **SYNC-03**: The system shall use event-driven `FileSystemWatcher` for immediate syncing, falling back to polling if the network share drops.
 

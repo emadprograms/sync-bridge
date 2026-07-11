@@ -34,7 +34,7 @@ Zero-trust file synchronization that completely eliminates the risk of bridging 
 The user maintains a local folder (`Documents\Sync`) that receives files from a WhatsApp bot (tracked in `sync-manifest.json`). These files must securely sync to a University network share. The University network strictly forbids bridging with the public internet. 
 A two-PC architecture is deployed:
 - PC A: Internet + Local LAN (hosts the local folder).
-- PC B: University Network + Local LAN (hosts the `\To_Uni` and `\To_Local` intermediate drop-folders).
+- PC B: University Network + Local LAN (hosts the single `\BridgeSync` intermediate shared folder).
 The challenge is keeping the folders perfectly synced while maintaining isolation and preventing the WhatsApp bot's JSON manifest from getting corrupted by the bridge's tracking state.
 
 ## Constraints
