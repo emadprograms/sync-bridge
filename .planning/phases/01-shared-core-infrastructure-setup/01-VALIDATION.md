@@ -38,8 +38,8 @@ created: 2026-07-11
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01 | 1 | SEC-01 | T-01-01 | Isolation check | unit | `Invoke-Pester -Path ./Tests/NetworkIsolation.Tests.ps1` | ❌ W0 | ⬜ pending |
-| 01-01-02 | 01 | 1 | SEC-02 | T-01-02 | SMB isolated | unit | `Invoke-Pester -Path ./Tests/SMB.Tests.ps1` | ❌ W0 | ⬜ pending |
+| 01-01-01 | 01 | 1 | SEC-01 | T-01-01 | Isolation check | unit | `Invoke-Pester -Path ./Tests/CoreUtils.Tests.ps1` | ❌ W0 | ⬜ pending |
+| 01-01-02 | 01 | 2 | SEC-02 | T-01-02 | SMB isolated | unit | `Invoke-Pester -Path ./Tests/NetworkIsolation.Tests.ps1` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -47,8 +47,8 @@ created: 2026-07-11
 
 ## Wave 0 Requirements
 
-- [ ] `Tests/NetworkIsolation.Tests.ps1` — stubs for SEC-01
-- [ ] `Tests/SMB.Tests.ps1` — stubs for SEC-02
+- [ ] `Tests/CoreUtils.Tests.ps1` — stubs for SEC-01
+- [ ] `Tests/NetworkIsolation.Tests.ps1` — stubs for SEC-02
 
 ---
 
