@@ -11,10 +11,10 @@
 
 ## Phase 2: State Management & Echo Prevention Core
 - **Requirements:** SYNC-02
-- **Description:** Implement the `uni-sync-manifest.json` read/write logic to track the synchronization state and prevent the system from getting stuck in an infinite echo loop.
+- **Description:** Implement the JSON state tracking read/write logic (`uni-sync-manifest.json` and `pcb-sync-manifest.json`) to track the synchronization state, recover from network drops, and prevent the system from getting stuck in an infinite echo loop.
 
 **Success Criteria:**
-- [ ] `Get-SyncState` returns a parsed object from `uni-sync-manifest.json`.
+- [ ] `Get-SyncState` returns a parsed object from a given state tracking JSON.
 - [ ] `Set-SyncState` successfully updates the tracking JSON with a new file identifier.
 - [ ] `Test-IsEchoLoop` correctly returns `$true` for a recently synced file, preventing a re-sync.
 

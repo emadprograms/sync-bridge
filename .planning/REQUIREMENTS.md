@@ -4,7 +4,7 @@
 
 ### Sync Core
 - [ ] **SYNC-01**: The system shall bidirectionally synchronize files between the local PC and the university network using a single shared SMB folder (`\BridgeSync`).
-- [ ] **SYNC-02**: The system shall prevent infinite echo loops (ping-ponging) by maintaining a state cache (`uni-sync-manifest.json`).
+- [ ] **SYNC-02**: The system shall prevent infinite echo loops (ping-ponging) and handle network disconnects by maintaining state caches on both sides (`uni-sync-manifest.json` on PC A, and `pcb-sync-manifest.json` on PC B).
 - [ ] **SYNC-03**: The system shall use event-driven `FileSystemWatcher` for immediate syncing, falling back to polling if the network share drops.
 
 ### Integration

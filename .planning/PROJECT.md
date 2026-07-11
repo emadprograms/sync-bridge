@@ -48,7 +48,7 @@ The challenge is keeping the folders perfectly synced while maintaining isolatio
 |----------|-----------|---------|
 | Two-PC Drop-Box Architecture | Eliminates complex adapter toggling and connection dropping errors on network shares. | — Pending |
 | Separate Tracking Manifests | Using a separate `uni-sync-manifest.json` while reading `sync-manifest.json` prevents breaking the existing WhatsApp bot. | — Pending |
-| In-Memory Cache for Echo Prevention | A single folder bi-directional sync requires state tracking to realize when it just pushed a file itself. | — Pending |
+| In-Memory Cache for Echo Prevention | Both PC A and PC B require state tracking JSONs (`uni-sync-manifest.json` and `pcb-sync-manifest.json`) to realize when they just pushed a file, and to recover from network drops. | — Pending |
 
 ## Evolution
 
