@@ -1,0 +1,5 @@
+{
+    "SmbSharePath":  "\\TestServer\\TestShare",
+    "LocalSyncPath":  "C:\\Temp\\Local",
+    "LogFilePath":  "C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_sync.log"
+}
