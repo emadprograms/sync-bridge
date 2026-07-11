@@ -20,9 +20,10 @@ Zero-trust file synchronization that completely eliminates the risk of bridging 
 
 ### Active
 
-- [ ] Create `PCA_Watcher.ps1` for the local PC to watch `Documents\Sync` and handle the local-to-LAN queue.
-- [ ] Create `PCB_Watcher.ps1` for the bridge PC to handle LAN-to-University and University-to-LAN queue management.
-- [ ] Implement the `uni-sync-manifest.json` memory cache logic to track pushed/pulled files and prevent echoing.
+- [ ] **Phase 2:** Create `PCA_Watcher.ps1` for the local PC to watch `Documents\Sync` and handle the local-to-LAN queue. *(Depends on Phase 1)*
+- [ ] **Phase 3:** Create `PCB_Watcher.ps1` for the bridge PC to handle LAN-to-University and University-to-LAN queue management. *(Depends on Phase 1)*
+- [ ] **Phase 4:** Implement the `uni-sync-manifest.json` and `pcb-sync-manifest.json` state tracking logic to track pushed/pulled files and prevent echo loops. *(Depends on Phase 2 & 3 — requires real watchers to test against)*
+- [ ] **Phase 5:** Upgrade watchers to event-driven (`FileSystemWatcher`) and harden via Windows Scheduled Tasks. *(Depends on Phase 2, 3 & 4)*
 
 ### Out of Scope
 
@@ -49,6 +50,7 @@ The challenge is keeping the folders perfectly synced while maintaining isolatio
 | Two-PC Drop-Box Architecture | Eliminates complex adapter toggling and connection dropping errors on network shares. | — Pending |
 | Separate Tracking Manifests | Using a separate `uni-sync-manifest.json` while reading `sync-manifest.json` prevents breaking the existing WhatsApp bot. | — Pending |
 | In-Memory Cache for Echo Prevention | Both PC A and PC B require state tracking JSONs (`uni-sync-manifest.json` and `pcb-sync-manifest.json`) to realize when they just pushed a file, and to recover from network drops. | — Pending |
+| Phase Reorder (State Mgmt → Phase 4) | State Management & Echo Prevention (originally Phase 2) moved to Phase 4. PC A and PC B watchers must exist to meaningfully test echo prevention end-to-end. | 2026-07-11 |
 
 ## Evolution
 
@@ -68,4 +70,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-07-11 after initialization*
+*Last updated: 2026-07-11 — phase order resequenced; State Management moved to Phase 4*
