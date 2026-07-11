@@ -1,2 +1,10 @@
 .agents/
 .gemini/
+sync-manifest.json
+.env
+
+.planning/state/
+.planning/scratch/
+.planning/logs/
+.planning/spikes/
+.planning/sketches/

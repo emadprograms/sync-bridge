@@ -1,0 +1,3 @@
+﻿[2026-07-11 17:33:56] [INFO] Attempting to authenticate with SMB share: \\localhost\TestShare
+[2026-07-11 17:34:01] [INFO] Cleaning up SMB connection to \\localhost\TestShare
+[2026-07-11 17:34:01] [ERROR] CRITICAL ERROR: Pre-flight connection check failed: The network connection could not be found.
