@@ -2,11 +2,11 @@
 
 ## What This Is
 
-Sync Bridge is a highly secure, uni-directional file synchronization system that moves files from an internet-facing WhatsApp bot drop folder (PC A) to a locked-down, air-gapped University network (PC B). It uses a granular Command & Acknowledge state machine protocol over a dedicated bridging LAN to ensure absolute security and reliability.
+Sync Bridge is a highly secure, bi-directional file synchronization system that moves files between an internet-facing WhatsApp bot drop folder (PC A) and a locked-down, air-gapped University network (PC B). It uses a granular Command & Acknowledge state machine protocol over a dedicated bridging LAN to ensure absolute security and reliability.
 
 ## Core Value
 
-Securely transfer files across an air-gapped boundary using a Switched Network Diode mechanism, ensuring that the University network is physically disconnected from the transfer bridge during payload movement.
+Securely transfer files bi-directionally across an air-gapped boundary using a Switched Network Diode mechanism, ensuring that the University network is physically disconnected from the transfer bridge during any payload movement.
 
 ## Requirements
 
@@ -22,6 +22,7 @@ Securely transfer files across an air-gapped boundary using a Switched Network D
 - [ ] [SYNC-01] File synchronization is managed through atomic JSON instructions dropped into PC B's Local Folder.
 - [ ] [SYNC-02] PC B implements a Switched Network Diode (disables University network adapter, transfers file, re-enables adapter).
 - [ ] [SYNC-03] The database directly tracks `is_synced` on the `Files` table to enable instant recovery on restart.
+- [ ] [SYNC-04] The system supports bi-directional sync (pushing files to the University network, and pulling new files from the University network back to PC A).
 - [ ] [UI-01] Build a web UI on PC A to visualize the database state, sync jobs, and errors once the core pipeline is stable.
 
 ### Out of Scope

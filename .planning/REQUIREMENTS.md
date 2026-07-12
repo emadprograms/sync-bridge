@@ -10,4 +10,5 @@
 - [SYNC-01] File synchronization is managed through atomic JSON instructions dropped into PC B's Local Folder.
 - [SYNC-02] PC B implements a Switched Network Diode (disables University network adapter, transfers file, re-enables adapter).
 - [SYNC-03] The database directly tracks `is_synced` on the `Files` table to enable instant recovery on restart.
+- [SYNC-04] The system supports bi-directional sync (pushing files to the University network, and pulling new files from the University network back to PC A).
 - [UI-01] Build a web UI on PC A to visualize the database state, sync jobs, and errors once the core pipeline is stable.
