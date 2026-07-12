@@ -1,5 +1,1 @@
-{
-    "SmbSharePath":  "\\TestServer\\TestShare",
-    "LocalSyncPath":  "C:\\Temp\\Local",
-    "LogFilePath":  "C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_sync.log"
-}
+{"SmbSharePath":"C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_env\\target","LocalSyncPath":"C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_env\\source","LogFilePath":"C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_env\\test.log","WhatsAppDropFolder":"C:\\Users\\Emad\\Documents\\GitHub\\sync-bridge\\Tests\\test_env\\source"}

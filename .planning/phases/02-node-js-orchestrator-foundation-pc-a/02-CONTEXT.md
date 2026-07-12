@@ -70,6 +70,7 @@ Initialize the Node.js project on PC A. Implement the basic infrastructure to wa
 
 </code_context>
 
+
 <deferred>
 ## Deferred Ideas
 
@@ -77,8 +78,17 @@ Initialize the Node.js project on PC A. Implement the basic infrastructure to wa
 - **Error Recovery/Retries**: Moved to Phase 4.
 - **Acknowledge Loop**: Moved to Phase 4.
 - **Network Diode Logic**: Moved to Phase 5.
-
 </deferred>
+
+<review_incorporation>
+## Review Feedback Incorporation (2026-07-12)
+
+Following the cross-AI review, the following adjustments are made to Phase 02:
+- **Write Completion**: `chokidar` will use `awaitWriteFinish` to ensure files are fully written before transfer, preventing partial reads.
+- **ACK Protocol Foundation**: While the full ACK state machine is deferred to Phase 4, Phase 02 will now include a `uuid` dependency to assign unique `jobId`s to every transfer instruction, enabling future matching.
+- **Concurrency Control**: A serial job queue will be implemented in the entry point to prevent race conditions and potential DB corruption in later phases.
+- **Deferred**: Network Diode recovery and Bi-directional conflict resolution are explicitly deferred to Phases 5 and 4 respectively.
+</review_incorporation>
 
 ---
 
