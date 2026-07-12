@@ -1,11 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment & Secrets
+.env
+.env.example
+config.json
+sync-manifest.json
+
+# OS & IDE
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+Thumbs.db
+.DS_Store
+
+# Gemini CLI & Agent internals
 .agents/
 .gemini/
-sync-manifest.json
-.env
 
+# Planning & Temporary Workspace
 .planning/state/
 .planning/scratch/
 .planning/logs/
 .planning/spikes/
 .planning/sketches/
 .planning.bak/
+
+# Project Specific
+*.log
+Tests/test_env/
