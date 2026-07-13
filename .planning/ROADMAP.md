@@ -18,12 +18,12 @@
 ## Phase 4: Command & Acknowledge State Machine (PC A & PC B)
 - **Requirements:** SYNC-01
 - **Depends on:** Phase 3
-- **Description:** Build the granular JSON protocol. Implement the worker loop on PC B (PowerShell) to read JSON instructions from its Local Folder, and the corresponding state-machine logic on PC A to parse acknowledgments and advance the `SyncJobs`.
+- **Description:** Build the granular JSON protocol. Implement the worker loop on PC B (PowerShell) to read JSON instructions from its Local Folder, and the corresponding state-machine logic on PC A to parse acknowledgments and advance the `SyncJobs`. **Crucially, implement a synchronous handshake: PC A commands a network disconnect, PC B executes and acknowledges, and only then does PC A transfer the payload.**
 
 ## Phase 5: Switched Network Diode (PC B)
 - **Requirements:** SYNC-02
 - **Depends on:** Phase 4
-- **Description:** Harden PC B's worker script to execute `Disable-NetAdapter` and `Enable-NetAdapter` around transfers to the Uni Shared Folder, achieving the true air-gap requirement. Add try/catch/finally blocks to prevent permanent network lock-outs.
+- **Description:** Harden PC B's worker script to execute `Disable-NetAdapter` and `Enable-NetAdapter` around transfers to the Uni Shared Folder. **This implements the "Diode" action commanded by the Phase 4 handshake, ensuring the University network is physically disconnected before any file arrives on PC B's Local Folder.** Add try/catch/finally blocks to prevent permanent network lock-outs.
 
 ## Phase 6: Web UI Visualization (PC A)
 - **Requirements:** UI-01

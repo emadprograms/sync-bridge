@@ -14,4 +14,10 @@ The system uses a simple imperative script architecture based on PowerShell func
 - **Network Validation** (`Scripts/Test-NetworkIsolation.ps1`): Dedicated script for network environment validation.
 
 ## Data Flow
-Configuration is read from `config.json` at runtime, which dictates the drop paths (`LocalSyncPath` and `SmbSharePath`). The utilities rely on JSON structures parsed via `ConvertFrom-Json`.
+Configuration is read from `config.json` at runtime, which dictates the drop paths (`LocalSyncPath` and `SmbSharePath`).
+
+**Mandatory Security Handshake:**
+The system must follow a strict synchronous sequence to ensure network isolation:
+1. PC A sends a 'Disconnect' command to PC B.
+2. PC B disables the Uni Network adapter and sends an acknowledgment.
+3. Only after receipt of the acknowledgment does PC A transfer the payload to PC B's LocalSyncPath.
