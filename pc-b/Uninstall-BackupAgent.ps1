@@ -1,5 +1,5 @@
 $TaskName = "SyncUtilityCheck"
-$TargetDir = "C:\SyncBridge\Scripts"
+$TargetDir = "C:\Users\Administrator\Documents\BackupScripts"
 
 # 1. Unregister the Scheduled Task
 if (Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue) {

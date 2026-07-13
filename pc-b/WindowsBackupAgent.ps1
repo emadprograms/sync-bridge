@@ -1,9 +1,10 @@
-$LocalInbound = "C:\SyncBridge\Inbound"
-$LocalOutbound = "C:\SyncBridge\Outbound"
-$RemoteStagingIn = "\\tsclient\C\SyncStaging\In"
-$RemoteStagingOut = "\\tsclient\C\SyncStaging\Out"
+$LocalInbound = "C:\Users\Administrator\Documents\Inbound"
+$LocalOutbound = "C:\Users\Administrator\Documents\Outbound"
+$RemoteStagingIn = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\In"
+$RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"
 $LogFile = "C:\Temp\SyncUtilityCheck.log"
 
+if (!(Test-Path "C:\Temp")) { New-Item -ItemType Directory -Path "C:\Temp" -Force | Out-Null }
 if (!(Test-Path $LocalInbound)) { New-Item -ItemType Directory -Path $LocalInbound -Force | Out-Null }
 if (!(Test-Path $LocalOutbound)) { New-Item -ItemType Directory -Path $LocalOutbound -Force | Out-Null }
 
@@ -14,6 +15,8 @@ $watcher.EnableRaisingEvents = $true
 $watcher.InternalBufferSize = 65536
 
 $action = {
+    $RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"
+    $LogFile = "C:\Temp\SyncUtilityCheck.log"
     $file = $Event.SourceEventArgs.FullPath
     if (!(Test-Path $file)) { return }
     
@@ -21,13 +24,20 @@ $action = {
     $allowlist = @(".jpg", ".jpeg", ".png", ".docx", ".xlsx", ".pptx", ".pdf", ".mp4", ".mov", ".avi")
     if ($allowlist -notcontains $extension) { return }
 
-    try {
-        $stream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::None)
-        $stream.Close()
-        $stream.Dispose()
-    } catch {
-        return
+    $locked = $true
+    $retries = 0
+    while ($locked -and $retries -lt 10) {
+        try {
+            $stream = [System.IO.File]::Open($file, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::None)
+            $stream.Close()
+            $stream.Dispose()
+            $locked = $false
+        } catch {
+            Start-Sleep -Milliseconds 500
+            $retries++
+        }
     }
+    if ($locked) { return }
 
     try {
         if (Test-Path $RemoteStagingOut) {

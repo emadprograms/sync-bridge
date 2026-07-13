@@ -1,4 +1,4 @@
-$TargetDir = "C:\SyncBridge\Scripts"
+$TargetDir = "C:\Users\Administrator\Documents\BackupScripts"
 if (!(Test-Path $TargetDir)) {
     New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
 }

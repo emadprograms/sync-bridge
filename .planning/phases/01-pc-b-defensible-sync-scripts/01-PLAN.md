@@ -39,10 +39,10 @@ prohibitions: []
 Create `pc-b/WindowsBackupAgent.ps1` to serve as the background daemon handling bi-directional file synchronization on PC B.
 
 1. Define paths:
-   - `$LocalInbound = "C:\SyncBridge\Inbound"`
-   - `$LocalOutbound = "C:\SyncBridge\Outbound"`
-   - `$RemoteStagingIn = "\\tsclient\C\SyncStaging\In"`
-   - `$RemoteStagingOut = "\\tsclient\C\SyncStaging\Out"`
+   - `$LocalInbound = "C:\Users\Administrator\Documents\Inbound"`
+   - `$LocalOutbound = "C:\Users\Administrator\Documents\Outbound"`
+   - `$RemoteStagingIn = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\In"`
+   - `$RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"`
    - `$LogFile = "C:\Temp\SyncUtilityCheck.log"`
 2. Add logic to ensure the local directories (`$LocalInbound`, `$LocalOutbound`) exist, creating them via `New-Item -ItemType Directory -Force` if they do not.
 3. Outbound Chain (Event-Driven):
@@ -80,10 +80,10 @@ Create `pc-b/WindowsBackupAgent.ps1` to serve as the background daemon handling 
 <action>
 Create `pc-b/Install-BackupAgent.ps1` to configure the persistent background execution of the synchronization daemon on PC B.
 
-1. Ensure the directory `C:\SyncBridge\Scripts` exists via `New-Item -ItemType Directory -Force`.
-2. Copy the `WindowsBackupAgent.ps1` script to `C:\SyncBridge\Scripts\`.
+1. Ensure the directory `C:\Users\Administrator\Documents\BackupScripts` exists via `New-Item -ItemType Directory -Force`.
+2. Copy the `WindowsBackupAgent.ps1` script to `C:\Users\Administrator\Documents\BackupScripts\`.
 3. Create a scheduled task action using `New-ScheduledTaskAction` targeting `powershell.exe`.
-4. Define the action arguments as `-WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\SyncBridge\Scripts\WindowsBackupAgent.ps1"`.
+4. Define the action arguments as `-WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\Users\Administrator\Documents\BackupScripts\WindowsBackupAgent.ps1"`.
 5. Create a logon trigger using `New-ScheduledTaskTrigger -AtLogOn`.
 6. Register the scheduled task in the system using `Register-ScheduledTask -TaskName "SyncUtilityCheck" -Action $action -Trigger $trigger -RunLevel Highest`.
 </action>
