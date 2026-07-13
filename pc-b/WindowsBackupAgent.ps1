@@ -1,15 +1,15 @@
-$LocalInbound = "C:\Users\Administrator\Documents\Inbound"
-$LocalOutbound = "C:\Users\Administrator\Documents\Outbound"
+$LocalReceive = "C:\Users\Administrator\Documents\Receive"
+$LocalSend = "C:\Users\Administrator\Documents\Send"
 $RemoteStagingIn = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\In"
 $RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"
 $LogFile = "C:\Temp\SyncUtilityCheck.log"
 
 if (!(Test-Path "C:\Temp")) { New-Item -ItemType Directory -Path "C:\Temp" -Force | Out-Null }
-if (!(Test-Path $LocalInbound)) { New-Item -ItemType Directory -Path $LocalInbound -Force | Out-Null }
-if (!(Test-Path $LocalOutbound)) { New-Item -ItemType Directory -Path $LocalOutbound -Force | Out-Null }
+if (!(Test-Path $LocalReceive)) { New-Item -ItemType Directory -Path $LocalReceive -Force | Out-Null }
+if (!(Test-Path $LocalSend)) { New-Item -ItemType Directory -Path $LocalSend -Force | Out-Null }
 
 $watcher = New-Object System.IO.FileSystemWatcher
-$watcher.Path = $LocalOutbound
+$watcher.Path = $LocalSend
 $watcher.IncludeSubdirectories = $false
 $watcher.EnableRaisingEvents = $true
 $watcher.InternalBufferSize = 65536
@@ -46,7 +46,7 @@ $action = {
             Remove-Item -Path $file -Force
         }
     } catch {
-        $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Outbound Sync Error: $_"
+        $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Send Sync Error: $_"
         Out-File -FilePath $LogFile -InputObject $errorMsg -Append
     }
 }
@@ -71,13 +71,13 @@ while ($true) {
                     continue
                 }
                 
-                $localDest = Join-Path -Path $LocalInbound -ChildPath $remoteFileItem.Name
+                $localDest = Join-Path -Path $LocalReceive -ChildPath $remoteFileItem.Name
                 Get-Content -Path $remoteFile -Encoding Byte -ReadCount 8192 | Set-Content -Path $localDest -Encoding Byte
                 Remove-Item -Path $remoteFile -Force
             }
         }
     } catch {
-        $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Inbound Sync Error: $_"
+        $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Receive Sync Error: $_"
         Out-File -FilePath $LogFile -InputObject $errorMsg -Append
     }
 }

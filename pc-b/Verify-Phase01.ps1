@@ -19,9 +19,9 @@ function Test-Requirement {
 $results = @()
 
 Write-Host "--- Validating WindowsBackupAgent.ps1 ---"
-$results += Test-Requirement "Inbound Polling (while loop)" $AgentPath 'while\s*\(.*true.*\)'
-$results += Test-Requirement "Inbound Sleep (5s)" $AgentPath 'Start-Sleep\s*-Seconds\s*5'
-$results += Test-Requirement "Outbound Watcher" $AgentPath 'New-Object\s+System.IO.FileSystemWatcher'
+$results += Test-Requirement "Receive Polling (while loop)" $AgentPath 'while\s*\(.*true.*\)'
+$results += Test-Requirement "Receive Sleep (5s)" $AgentPath 'Start-Sleep\s*-Seconds\s*5'
+$results += Test-Requirement "Send Watcher" $AgentPath 'New-Object\s+System.IO.FileSystemWatcher'
 $results += Test-Requirement "Binary Safety (Encoding Byte)" $AgentPath '-Encoding\s+Byte'
 $results += Test-Requirement "Lock Detection (FileShare None)" $AgentPath '\[System\.IO\.FileShare\]::None'
 $results += Test-Requirement "Queue Cleanup (Remove-Item)" $AgentPath 'Remove-Item\s+-Path\s+\$\w+\s+-Force'
