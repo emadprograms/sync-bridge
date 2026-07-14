@@ -9,4 +9,4 @@ Copy-Item -Path $SourceScript -Destination $TargetScript -Force
 
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File ""$TargetScript"""
 $trigger = New-ScheduledTaskTrigger -AtLogOn
-Register-ScheduledTask -TaskName "SyncUtilityCheck" -Action $action -Trigger $trigger -RunLevel Highest | Out-Null
+Register-ScheduledTask -TaskName "SyncUtilityCheck" -Action $action -Trigger $trigger -Force | Out-Null
