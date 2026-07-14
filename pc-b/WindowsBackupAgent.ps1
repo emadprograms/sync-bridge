@@ -1,5 +1,5 @@
-$LocalReceive = "\\10.1.11.31\s&cd\HOUSING BRANCH\Receive"
-$LocalSend = "\\10.1.11.31\s&cd\HOUSING BRANCH\Send"
+$LocalReceive = "Z:\HOUSING BRANCH\Receive"
+$LocalSend = "Z:\HOUSING BRANCH\Send"
 $RemoteStagingIn = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\In"
 $RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"
 $LogFile = "C:\Temp\SyncUtilityCheck.log"
