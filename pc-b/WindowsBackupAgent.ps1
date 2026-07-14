@@ -46,7 +46,9 @@ $action = {
     try {
         if (Test-Path $RemoteStagingOut) {
             $destFile = Join-Path -Path $RemoteStagingOut -ChildPath (Split-Path $file -Leaf)
-            Get-Content -Path $file -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $destFile -Encoding Byte -ErrorAction Stop
+            $tmpDestFile = $destFile + ".tmp"
+            Get-Content -Path $file -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $tmpDestFile -Encoding Byte -ErrorAction Stop
+            Rename-Item -Path $tmpDestFile -NewName (Split-Path $file -Leaf) -Force -ErrorAction Stop
             Remove-Item -Path $file -Force -ErrorAction Stop
         }
     } catch {
@@ -70,7 +72,7 @@ while ($true) {
     
     try {
         if (Test-Path $RemoteStagingIn) {
-            $files = Get-ChildItem -Path $RemoteStagingIn -File
+            $files = Get-ChildItem -Path $RemoteStagingIn -File | Where-Object { $_.Extension -ne '.tmp' }
             foreach ($remoteFileItem in $files) {
                 $remoteFile = $remoteFileItem.FullName
                 
@@ -83,7 +85,9 @@ while ($true) {
                 }
                 
                 $localDest = Join-Path -Path $LocalReceive -ChildPath $remoteFileItem.Name
-                Get-Content -Path $remoteFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $localDest -Encoding Byte -ErrorAction Stop
+                $tmpLocalDest = $localDest + ".tmp"
+                Get-Content -Path $remoteFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $tmpLocalDest -Encoding Byte -ErrorAction Stop
+                Rename-Item -Path $tmpLocalDest -NewName $remoteFileItem.Name -Force -ErrorAction Stop
                 Remove-Item -Path $remoteFile -Force -ErrorAction Stop
             }
         }
@@ -111,7 +115,9 @@ while ($true) {
                     }
                     
                     $destFile = Join-Path -Path $RemoteStagingOut -ChildPath $localFileItem.Name
-                    Get-Content -Path $localFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $destFile -Encoding Byte -ErrorAction Stop
+                    $tmpDestFile = $destFile + ".tmp"
+                    Get-Content -Path $localFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $tmpDestFile -Encoding Byte -ErrorAction Stop
+                    Rename-Item -Path $tmpDestFile -NewName $localFileItem.Name -Force -ErrorAction Stop
                     Remove-Item -Path $localFile -Force -ErrorAction Stop
                 }
             }
