@@ -1,4 +1,4 @@
-$TargetDir = "C:\Users\Administrator\Documents\BackupScripts"
+$TargetDir = "C:\Users\Public\BackupScripts"
 if (!(Test-Path $TargetDir)) {
     New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
 }
@@ -10,3 +10,5 @@ Copy-Item -Path $SourceScript -Destination $TargetScript -Force
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Hidden -ExecutionPolicy Bypass -File ""$TargetScript"""
 $trigger = New-ScheduledTaskTrigger -AtLogOn
 Register-ScheduledTask -TaskName "SyncUtilityCheck" -Action $action -Trigger $trigger -Force | Out-Null
+
+Write-Host "PC-B Sync Bridge has been successfully installed and scheduled to run automatically on login!"
