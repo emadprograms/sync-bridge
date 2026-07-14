@@ -14,7 +14,13 @@ foreach ($line in $envContent) {
 # Save credentials to Windows Credential Manager
 cmdkey /generic:"TERMSRV/$RDP_IP" /user:$RDP_USER /pass:$RDP_PASS | Out-Null
 
-# Launch Remote Desktop
-# Note: RDP must be configured previously to share the C: drive in the default settings,
-# or the user can save a .rdp file and pass it here instead.
-Start-Process "mstsc.exe" -ArgumentList "/v:$RDP_IP"
+$rdpFile = Join-Path -Path $PSScriptRoot -ChildPath "AutoRDP.rdp"
+$rdpContent = @"
+full address:s:$RDP_IP
+drivestoredirect:s:*
+prompt for credentials:i:0
+"@
+Set-Content -Path $rdpFile -Value $rdpContent
+
+# Launch Remote Desktop using the dynamically generated RDP file
+Start-Process "mstsc.exe" -ArgumentList "`"$rdpFile`""
