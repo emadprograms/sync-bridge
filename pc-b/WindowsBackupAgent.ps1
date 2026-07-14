@@ -46,8 +46,8 @@ $action = {
     try {
         if (Test-Path $RemoteStagingOut) {
             $destFile = Join-Path -Path $RemoteStagingOut -ChildPath (Split-Path $file -Leaf)
-            Get-Content -Path $file -Encoding Byte -ReadCount 8192 | Set-Content -Path $destFile -Encoding Byte
-            Remove-Item -Path $file -Force
+            Get-Content -Path $file -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $destFile -Encoding Byte -ErrorAction Stop
+            Remove-Item -Path $file -Force -ErrorAction Stop
         }
     } catch {
         $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Send Sync Error: $_"
@@ -83,8 +83,8 @@ while ($true) {
                 }
                 
                 $localDest = Join-Path -Path $LocalReceive -ChildPath $remoteFileItem.Name
-                Get-Content -Path $remoteFile -Encoding Byte -ReadCount 8192 | Set-Content -Path $localDest -Encoding Byte
-                Remove-Item -Path $remoteFile -Force
+                Get-Content -Path $remoteFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $localDest -Encoding Byte -ErrorAction Stop
+                Remove-Item -Path $remoteFile -Force -ErrorAction Stop
             }
         }
     } catch {
@@ -111,8 +111,8 @@ while ($true) {
                     }
                     
                     $destFile = Join-Path -Path $RemoteStagingOut -ChildPath $localFileItem.Name
-                    Get-Content -Path $localFile -Encoding Byte -ReadCount 8192 | Set-Content -Path $destFile -Encoding Byte
-                    Remove-Item -Path $localFile -Force
+                    Get-Content -Path $localFile -Encoding Byte -ReadCount 8192 -ErrorAction Stop | Set-Content -Path $destFile -Encoding Byte -ErrorAction Stop
+                    Remove-Item -Path $localFile -Force -ErrorAction Stop
                 }
             }
             $lastSendSweep = Get-Date
