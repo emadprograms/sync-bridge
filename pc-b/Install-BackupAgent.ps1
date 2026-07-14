@@ -1,4 +1,4 @@
-$TargetDir = "C:\Users\Public\BackupScripts"
+$TargetDir = "C:\Users\em.alam\Documents\BackupScripts"
 if (!(Test-Path $TargetDir)) {
     New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
 }
