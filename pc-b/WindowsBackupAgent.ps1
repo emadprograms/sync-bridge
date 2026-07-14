@@ -18,6 +18,10 @@ $action = {
     $RemoteStagingOut = "\\tsclient\C\Users\Emad Arshad alam\Documents\SyncStaging\Out"
     $LogFile = "C:\Temp\SyncUtilityCheck.log"
     $file = $Event.SourceEventArgs.FullPath
+    
+    $now = Get-Date
+    if ($now.DayOfWeek -eq 'Saturday' -or $now.Hour -lt 7 -or $now.Hour -ge 14) { return }
+
     if (!(Test-Path $file)) { return }
     
     $extension = [System.IO.Path]::GetExtension($file).ToLower()
@@ -57,6 +61,11 @@ Register-ObjectEvent -InputObject $watcher -EventName Changed -SourceIdentifier 
 while ($true) {
     Start-Sleep -Seconds 5
     
+    $now = Get-Date
+    if ($now.DayOfWeek -eq 'Saturday' -or $now.Hour -lt 7 -or $now.Hour -ge 14) {
+        continue
+    }
+    
     try {
         if (Test-Path $RemoteStagingIn) {
             $files = Get-ChildItem -Path $RemoteStagingIn -File
@@ -78,6 +87,33 @@ while ($true) {
         }
     } catch {
         $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Receive Sync Error: $_"
+        Out-File -FilePath $LogFile -InputObject $errorMsg -Append
+    }
+
+    try {
+        if (Test-Path $RemoteStagingOut) {
+            $files = Get-ChildItem -Path $LocalSend -File
+            $allowlist = @(".jpg", ".jpeg", ".png", ".docx", ".xlsx", ".pptx", ".pdf", ".mp4", ".mov", ".avi")
+            foreach ($localFileItem in $files) {
+                $localFile = $localFileItem.FullName
+                $extension = [System.IO.Path]::GetExtension($localFile).ToLower()
+                if ($allowlist -notcontains $extension) { continue }
+                
+                try {
+                    $stream = [System.IO.File]::Open($localFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::None)
+                    $stream.Close()
+                    $stream.Dispose()
+                } catch {
+                    continue
+                }
+                
+                $destFile = Join-Path -Path $RemoteStagingOut -ChildPath $localFileItem.Name
+                Get-Content -Path $localFile -Encoding Byte -ReadCount 8192 | Set-Content -Path $destFile -Encoding Byte
+                Remove-Item -Path $localFile -Force
+            }
+        }
+    } catch {
+        $errorMsg = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Send Sync Polling Error: $_"
         Out-File -FilePath $LogFile -InputObject $errorMsg -Append
     }
 }
